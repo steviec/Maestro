@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.*
 import maestro.cli.mcp.MaestroTool
 import maestro.cli.mcp.schema.McpToolInput
+import maestro.cli.mcp.schema.StructuredOutput
 import maestro.cli.session.MaestroSessionManager
 import maestro.orchestra.MaestroCommand
 import maestro.orchestra.Orchestra
@@ -25,7 +26,7 @@ data class StopAppOutput(
     val deviceId: String,
     val appId: String,
     val message: String
-)
+) : StructuredOutput
 
 object StopAppTool {
     fun create(sessionManager: MaestroSessionManager): RegisteredTool {

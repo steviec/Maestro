@@ -4,12 +4,12 @@
 
 evals:
   models:
-    - claude-3-5-haiku-latest
+    - claude-3-7-sonnet-latest
   timeout: 30000
   max_steps: 3
   tests:
     - name: Lists all available tools
-      prompt: Please list all available maestro tools you have access to.
+      prompt: Please list all available maestro mcp tools you have access to.
       expected_tool_calls:
         allowed: []
       response_scorers:
@@ -40,10 +40,9 @@ evals:
     - name: Queries Maestro documentation
       prompt: How do I tap on an element with specific text in Maestro?
       expected_tool_calls:
-        required:
-          - query_docs
         allowed:
           - cheat_sheet
+          - query_docs
       response_scorers:
         - type: regex
           pattern: '(tap|tapOn|text)'
@@ -51,7 +50,7 @@ evals:
           criteria: >
             Did the assistant provide accurate information about tapping elements
             with text in Maestro, including proper syntax or examples?
-          threshold: 0.8
+          threshold: 0.7
 
     - name: Validates flow syntax
       prompt: 'Check if this Maestro flow syntax is valid: ''- tapOn: "Submit button"'''

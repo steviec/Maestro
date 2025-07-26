@@ -26,6 +26,6 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 # Run the evaluation tests (from mcp directory so paths work correctly)
 echo "🧪 Executing MCP evaluation tests..."
 cd "$SCRIPT_DIR"
-npx -y mcp-server-tester@1.3.1 evals full-evals.yaml --server-config maestro-mcp.json || true
+npx -y mcp-server-tester@1.3.1 evals full-evals.yaml --server-config maestro-mcp.json --debug || true
 
 echo "✅ MCP evaluation tests completed!"

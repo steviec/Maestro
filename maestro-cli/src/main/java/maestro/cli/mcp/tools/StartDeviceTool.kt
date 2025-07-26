@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.*
 import maestro.cli.mcp.MaestroTool
 import maestro.cli.mcp.schema.McpToolInput
+import maestro.cli.mcp.schema.StructuredOutput
 import maestro.device.DeviceService
 import maestro.device.Platform
 
@@ -23,7 +24,7 @@ data class StartDeviceOutput(
     val platform: String,
     val type: String,
     val alreadyRunning: Boolean
-)
+) : StructuredOutput
 
 object StartDeviceTool {
     fun create(): RegisteredTool {

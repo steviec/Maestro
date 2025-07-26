@@ -5,6 +5,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import maestro.cli.mcp.MaestroTool
 import maestro.cli.mcp.schema.McpToolInput
+import maestro.cli.mcp.schema.StructuredOutput
 import maestro.cli.session.MaestroSessionManager
 import maestro.orchestra.LaunchAppCommand
 import maestro.orchestra.MaestroCommand
@@ -28,7 +29,7 @@ data class LaunchAppOutput(
     val deviceId: String,
     val appId: String,
     val message: String
-)
+) : StructuredOutput
 
 object LaunchAppTool {
     fun create(sessionManager: MaestroSessionManager): RegisteredTool {

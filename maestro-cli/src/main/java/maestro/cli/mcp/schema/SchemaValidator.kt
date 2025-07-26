@@ -126,6 +126,40 @@ object SchemaValidator {
             isError = true
         )
     }
+    
+    /**
+     * Create a CallToolResult from an McpOutput instance.
+     * Handles each output type appropriately according to MCP specification.
+     */
+    inline fun <reified T : McpOutput> createMcpResult(output: T): CallToolResult {
+        return when (output) {
+            is TextOutput -> CallToolResult(
+                content = listOf(TextContent(output.text)),
+                structuredContent = null
+            )
+            
+            is ImageOutput -> CallToolResult(
+                content = listOf(ImageContent(data = output.data, mimeType = output.mimeType)),
+                structuredContent = null
+            )
+            
+            is AudioOutput -> CallToolResult(
+                content = listOf(AudioContent(data = output.data, mimeType = output.mimeType)),
+                structuredContent = null
+            )
+            
+            is StructuredOutput -> {
+                // For structured output, provide both text and structured content
+                val jsonString = json.encodeToString(serializer<T>(), output)
+                val jsonObject = json.encodeToJsonElement(serializer<T>(), output).jsonObject
+                
+                CallToolResult(
+                    content = listOf(TextContent(jsonString)),
+                    structuredContent = jsonObject
+                )
+            }
+        }
+    }
 }
 
 /**

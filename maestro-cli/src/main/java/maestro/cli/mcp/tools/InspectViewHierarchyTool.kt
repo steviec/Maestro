@@ -8,6 +8,7 @@ import kotlinx.serialization.json.*
 import maestro.TreeNode
 import maestro.cli.mcp.MaestroTool
 import maestro.cli.mcp.schema.McpToolInput
+import maestro.cli.mcp.schema.StructuredOutput
 import maestro.cli.session.MaestroSessionManager
 
 // Schema definitions for this tool
@@ -22,7 +23,7 @@ data class InspectViewHierarchyOutput(
     val deviceId: String,
     val hierarchy: String, // CSV format view hierarchy
     val format: String = "csv"
-)
+) : StructuredOutput
 
 object InspectViewHierarchyTool {
     fun create(sessionManager: MaestroSessionManager): RegisteredTool {

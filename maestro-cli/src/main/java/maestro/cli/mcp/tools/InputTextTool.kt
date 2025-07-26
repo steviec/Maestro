@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.*
 import maestro.cli.mcp.MaestroTool
 import maestro.cli.mcp.schema.McpToolInput
+import maestro.cli.mcp.schema.StructuredOutput
 import maestro.cli.session.MaestroSessionManager
 import maestro.orchestra.InputTextCommand
 import maestro.orchestra.MaestroCommand
@@ -25,7 +26,7 @@ data class InputTextOutput(
     val deviceId: String,
     val text: String,
     val message: String
-)
+) : StructuredOutput
 
 object InputTextTool {
     fun create(sessionManager: MaestroSessionManager): RegisteredTool {

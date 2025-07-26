@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.*
 import maestro.cli.mcp.MaestroTool
 import maestro.cli.mcp.schema.McpToolInput
+import maestro.cli.mcp.schema.StructuredOutput
 import maestro.cli.session.MaestroSessionManager
 import maestro.orchestra.BackPressCommand
 import maestro.orchestra.Orchestra
@@ -23,7 +24,7 @@ data class BackOutput(
     val success: Boolean,
     val deviceId: String,
     val message: String
-)
+) : StructuredOutput
 
 object BackTool {
     fun create(sessionManager: MaestroSessionManager): RegisteredTool {

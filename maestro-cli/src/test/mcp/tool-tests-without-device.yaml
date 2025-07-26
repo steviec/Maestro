@@ -25,13 +25,13 @@ tools:
         result:
           contains: "device"
 
-    - name: "Get Maestro cheat sheet (expect API key required)"
+    - name: "Get Maestro cheat sheet"
       tool: "cheat_sheet"
       params: {}
       expect:
-        success: false
-        error:
-          contains: "MAESTRO_CLOUD_API_KEY"
+        success: true
+        result:
+          contains: "Maestro Flow Script Cheat Sheet"
 
     - name: "Query Maestro docs (expect API key required)"
       tool: "query_docs"

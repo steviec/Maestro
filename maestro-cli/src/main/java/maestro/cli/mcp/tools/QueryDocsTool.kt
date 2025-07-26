@@ -7,6 +7,7 @@ import kotlinx.serialization.json.*
 import maestro.auth.ApiKey
 import maestro.cli.mcp.MaestroTool
 import maestro.cli.mcp.schema.McpToolInput
+import maestro.cli.mcp.schema.TextOutput
 import maestro.utils.HttpClient
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.Request
@@ -19,15 +20,9 @@ data class QueryDocsInput(
     val question: String
 ) : McpToolInput
 
-@Serializable
-data class QueryDocsOutput(
-    val answer: String,
-    val success: Boolean = true
-)
-
 object QueryDocsTool {
     fun create(): RegisteredTool {
-        return MaestroTool.create<QueryDocsInput, QueryDocsOutput>(
+        return MaestroTool.create<QueryDocsInput, TextOutput>(
             name = "query_docs",
             description = "Query the Maestro documentation for specific information. " +
                 "Ask questions about Maestro features, commands, best practices, and troubleshooting. " +
@@ -69,10 +64,11 @@ object QueryDocsTool {
                 try {
                     val jsonResponse = Json.parseToJsonElement(responseBody).jsonObject
                     val answer = jsonResponse["answer"]?.jsonPrimitive?.content ?: responseBody
-                    QueryDocsOutput(answer = answer)
+                    // Return text-only content without structured data
+                    TextOutput(answer)
                 } catch (e: Exception) {
                     // If JSON parsing fails, return the raw response
-                    QueryDocsOutput(answer = responseBody)
+                    TextOutput(responseBody)
                 }
             }
         }

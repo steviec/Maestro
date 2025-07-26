@@ -77,3 +77,13 @@ tools:
           APP_ID: "com.apple.mobilesafari"
       expect:
         success: true
+
+    - name: "Test run_flow_files with multiple flow files and nested paths"
+      tool: "run_flow_files"
+      params:
+        deviceId: "${DEVICE_ID}"
+        flowFiles: "setup/flows/launch-safari-ios.yaml,setup/flows/launch-safari-ios.yaml"
+        env: 
+          APP_ID: "com.apple.mobilesafari"
+      expect:
+        success: true        

@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.*
 import maestro.cli.mcp.MaestroTool
 import maestro.cli.mcp.schema.McpToolInput
+import maestro.cli.mcp.schema.StructuredOutput
 import maestro.cli.session.MaestroSessionManager
 import maestro.cli.util.WorkingDirectory
 import maestro.orchestra.Orchestra
@@ -43,7 +44,7 @@ data class RunFlowFilesOutput(
     val results: List<FlowResult>,
     val envVars: Map<String, String>? = null,
     val message: String
-)
+) : StructuredOutput
 
 object RunFlowFilesTool {
     fun create(sessionManager: MaestroSessionManager): RegisteredTool {

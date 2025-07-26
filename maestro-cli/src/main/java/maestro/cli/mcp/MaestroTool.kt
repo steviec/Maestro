@@ -3,10 +3,7 @@ package maestro.cli.mcp
 import io.modelcontextprotocol.kotlin.sdk.*
 import io.modelcontextprotocol.kotlin.sdk.server.RegisteredTool
 import kotlinx.serialization.serializer
-import maestro.cli.mcp.schema.McpToolInput
-import maestro.cli.mcp.schema.McpToolResult
-import maestro.cli.mcp.schema.SchemaValidator
-import maestro.cli.mcp.schema.ValidationResult
+import maestro.cli.mcp.schema.*
 
 /**
  * MaestroTool provides a type-safe factory for creating MCP tools with automatic schema generation.
@@ -58,26 +55,50 @@ import maestro.cli.mcp.schema.ValidationResult
  * - Comprehensive error handling
  */
 object MaestroTool {
-    inline fun <reified TInput : McpToolInput, reified TOutput : Any> create(
+    /**
+     * Create a tool with explicit input and output types.
+     * The output type determines how the response is formatted:
+     * - TextOutput: Only text content, no structuredContent
+     * - ImageOutput: Image content only
+     * - AudioOutput: Audio content only
+     * - StructuredOutput: Both text (JSON) and structuredContent
+     * 
+     * Example:
+     * ```
+     * MaestroTool.create<LaunchAppInput, LaunchAppOutput>(
+     *     name = "launch_app",
+     *     description = "Launch an application"
+     * ) { input ->
+     *     LaunchAppOutput(success = true, deviceId = input.deviceId)
+     * }
+     * ```
+     */
+    inline fun <reified TInput : McpToolInput, reified TOutput : McpOutput> create(
         name: String,
         description: String,
         crossinline handler: suspend (TInput) -> TOutput
     ): RegisteredTool {
+        // Determine output schema based on output type
+        val outputSchema = when {
+            StructuredOutput::class.java.isAssignableFrom(TOutput::class.java) -> 
+                SchemaValidator.createOutputSchema<TOutput>()
+            else -> null
+        }
+        
         return RegisteredTool(
             Tool(
-                name = name,
-                description = description,
-                inputSchema = SchemaValidator.createInputSchema<TInput>(),
-                outputSchema = SchemaValidator.createOutputSchema<TOutput>(),
-                annotations = null
+                name,
+                description,
+                SchemaValidator.createInputSchema<TInput>(),
+                outputSchema,
+                null  // annotations
             )
         ) { request ->
-            // Inline the executeStructuredTool logic
             when (val validationResult = SchemaValidator.validateInput(request, serializer<TInput>())) {
                 is ValidationResult.Success -> {
                     try {
                         val result = handler(validationResult.value)
-                        SchemaValidator.createStructuredResult(result)
+                        SchemaValidator.createMcpResult(result)
                     } catch (e: Exception) {
                         SchemaValidator.createErrorResult(
                             McpToolResult.Error("Tool execution failed: ${e.message}")

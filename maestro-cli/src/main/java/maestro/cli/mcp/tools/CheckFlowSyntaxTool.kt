@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.*
 import maestro.cli.mcp.MaestroTool
 import maestro.cli.mcp.schema.McpToolInput
+import maestro.cli.mcp.schema.StructuredOutput
 import maestro.orchestra.yaml.YamlCommandReader
 
 // Schema definitions for this tool
@@ -20,13 +21,13 @@ data class CheckFlowSyntaxOutput(
     val valid: Boolean,
     val message: String,
     val error: String? = null
-)
+) : StructuredOutput
 
 object CheckFlowSyntaxTool {
     fun create(): RegisteredTool {
         return MaestroTool.create<CheckFlowSyntaxInput, CheckFlowSyntaxOutput>(
             name = "check_flow_syntax",
-            description = "Validates the syntax of a block of Maestro code. Valid maestro code must be well-formatted YAML."
+            description = "Check your YAML flow syntax to verify correctness. Use this before running flows to ensure they are well-formed and free of syntax errors. ",
         ) { input ->
             try {
                 YamlCommandReader.checkSyntax(input.flowYaml)
