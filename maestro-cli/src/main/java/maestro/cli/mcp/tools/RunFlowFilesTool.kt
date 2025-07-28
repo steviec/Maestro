@@ -50,7 +50,17 @@ object RunFlowFilesTool {
     fun create(sessionManager: MaestroSessionManager): RegisteredTool {
         return MaestroTool.create<RunFlowFilesInput, RunFlowFilesOutput>(
             name = "run_flow_files",
-            description = "Run one or more full Maestro test files. If no device is running, you'll need to start a device first. If the command fails using a relative path, try using an absolute path."
+            description = """
+Run one or more full Maestro test files.
+
+If a device id is not provided, you MUST request one from the `start_device` tool first.
+Use the `cheat_sheet` tool to retrieve a summary of Maestro's syntax before writing any code.
+
+**Please provide the full path to the files**. 
+
+If there are spaces in the path, please enclose the path in quotes.
+If a file extension is not provided, please add ".yaml" to the filename.
+            """
         ) { input ->
             val flowFiles = input.flowFiles.split(",").map { it.trim() }
             

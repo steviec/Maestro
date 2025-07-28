@@ -19,8 +19,8 @@ object CheatSheetTool {
     fun create(): RegisteredTool {
         return MaestroTool.create<CheatSheetInput, TextOutput>(
             name = "cheat_sheet",
-            description = "Get the Maestro cheat sheet with common commands and syntax examples. " +
-                "Returns comprehensive documentation on Maestro flow syntax, commands, and best practices."
+            description = """Get the Maestro cheat sheet with common commands and syntax examples. 
+                Returns comprehensive documentation on Maestro flow syntax, commands, and best practices."""
         ) { input ->
             try {
                 // Load cheat sheet from resources

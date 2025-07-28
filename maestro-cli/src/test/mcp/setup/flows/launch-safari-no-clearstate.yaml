@@ -1,0 +1,8 @@
+appId: com.apple.mobilesafari
+---
+# Simple Safari launch
+- launchApp
+
+# Wait for Safari to load
+- waitForAnimationToEnd:
+    timeout: 2000

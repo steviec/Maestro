@@ -30,10 +30,12 @@ object StartDeviceTool {
     fun create(): RegisteredTool {
         return MaestroTool.create<StartDeviceInput, StartDeviceOutput>(
             name = "start_device",
-            description = "Start a device (simulator/emulator) and return its device ID. " +
-                "You must provide either a device_id (from list_devices) or a platform (ios or android). " +
-                "If device_id is provided, starts that device. If platform is provided, starts any available device for that platform. " +
-                "If neither is provided, defaults to platform = ios."
+            description = """
+                Start a device (simulator/emulator) and return its device ID.
+                You must provide either a device_id (from list_devices) or a platform (ios or android).
+                If device_id is provided, starts that device. If platform is provided, starts any available device for that platform.
+                If neither is provided, defaults to platform = ios.
+            """
         ) { input ->
             // Get all connected and available devices
             val availableDevices = DeviceService.listAvailableForLaunchDevices(includeWeb = true)

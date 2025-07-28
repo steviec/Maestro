@@ -27,7 +27,11 @@ object CheckFlowSyntaxTool {
     fun create(): RegisteredTool {
         return MaestroTool.create<CheckFlowSyntaxInput, CheckFlowSyntaxOutput>(
             name = "check_flow_syntax",
-            description = "Check your YAML flow syntax to verify correctness. Use this before running flows to ensure they are well-formed and free of syntax errors. ",
+            description = """
+              Validates the syntax of a block of Maestro code.
+              Valid maestro code must be well-formatted YAML.
+              This tool will return an error message if the code is not valid or OK if it is.
+            """,
         ) { input ->
             try {
                 YamlCommandReader.checkSyntax(input.flowYaml)
