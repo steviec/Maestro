@@ -6,8 +6,8 @@ import kotlinx.serialization.json.*
 import maestro.cli.session.MaestroSessionManager
 import okio.Buffer
 import java.util.Base64
+import maestro.cli.mcp.utils.ImageUtils
 import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
 import javax.imageio.ImageIO
 
 object TakeScreenshotTool {
@@ -48,14 +48,10 @@ object TakeScreenshotTool {
                     session.maestro.takeScreenshot(buffer, true)
                     val pngBytes = buffer.readByteArray()
                     
-                    // Convert PNG to JPEG
                     val pngImage = ImageIO.read(ByteArrayInputStream(pngBytes))
-                    val jpegOutput = ByteArrayOutputStream()
-                    ImageIO.write(pngImage, "JPEG", jpegOutput)
-                    val jpegBytes = jpegOutput.toByteArray()
-                    
-                    val base64 = Base64.getEncoder().encodeToString(jpegBytes)
-                    base64
+                    val scaledImage = ImageUtils.downscaleImageToMaxDimension(pngImage, 1000)
+                    val scaledJpegBytes = ImageUtils.convertBufferedImageToJpegBytes(scaledImage)
+                    encodeToBase64(scaledJpegBytes)
                 }
                 
                 val imageContent = ImageContent(
@@ -71,5 +67,11 @@ object TakeScreenshotTool {
                 )
             }
         }
+    }
+
+
+
+    private fun encodeToBase64(bytes: ByteArray): String {
+        return Base64.getEncoder().encodeToString(bytes)
     }
 }
